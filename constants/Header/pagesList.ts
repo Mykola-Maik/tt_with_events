@@ -1,0 +1,21 @@
+import { ROUTES } from "@/enums/routes/Routes";
+
+let id = 0;
+
+export const pagesList = [
+  {
+    id: id++,
+    name: "Home",
+    href: ROUTES.HOME,
+  },
+  {
+    id: id++,
+    name: "List",
+    href: ROUTES.LIST,
+  },
+  {
+    id: id++,
+    name: "Categories",
+    href: ROUTES.CATEGORIES,
+  },
+];
