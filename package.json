@@ -17,6 +17,7 @@
     "@mui/material": "^5.15.4",
     "@mui/x-date-pickers": "^7.14.0",
     "@reduxjs/toolkit": "2.2.7",
+    "axios": "^1.7.5",
     "date-fns": "3.6.0",
     "faker": "6.6.6",
     "next": "14.2.7",

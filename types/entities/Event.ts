@@ -5,3 +5,7 @@ export interface AddEvent {
   dateOfEvent: string;
   description: string;
 }
+
+export interface Event extends AddEvent {
+  id: number;
+}

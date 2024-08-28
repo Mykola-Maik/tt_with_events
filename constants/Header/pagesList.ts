@@ -13,9 +13,4 @@ export const pagesList = [
     name: "List",
     href: ROUTES.LIST,
   },
-  {
-    id: id++,
-    name: "Categories",
-    href: ROUTES.CATEGORIES,
-  },
 ];

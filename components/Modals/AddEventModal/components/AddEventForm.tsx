@@ -14,9 +14,11 @@ import { AddEventFormView } from "./AddEventFormView";
 
 type FormData = yup.InferType<ReturnType<typeof validationSchema>>;
 
-interface AddFormFormProps {}
+interface AddFormFormProps {
+  eventId?: string;
+}
 
-export const AddEventForm = ({}: AddFormFormProps) => {
+export const AddEventForm = ({ eventId }: AddFormFormProps) => {
   const dispatch = useDispatch();
 
   const defaultValues: FormData = {
@@ -52,6 +54,14 @@ export const AddEventForm = ({}: AddFormFormProps) => {
   const handleFormSubmit: SubmitHandler<FormData> = (event) => {
     console.log(event);
     dispatch(removeServiceModal(ServiceModalName.AddEvent));
+
+    if (eventId) {
+      // make patch request to update event by eventId
+      dispatch(removeServiceModal(ServiceModalName.EditEvent));
+    } else {
+      // make post request to create new event
+      dispatch(removeServiceModal(ServiceModalName.AddEvent));
+    }
   };
 
   return (
@@ -105,7 +115,7 @@ export const AddEventForm = ({}: AddFormFormProps) => {
               },
             }}
           >
-            Add
+            {eventId ? "Save" : "Add"}
           </Button>
         </Box>
       </Box>
