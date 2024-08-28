@@ -14,7 +14,6 @@ export const colors = {
   buttonContainedHover: "#4651C2",
   mainStroke: "#D4D7DD",
   mainBackground: "#ECEFF3",
-  tableHeadGray: "#505F6F",
   placeholder: "#667085",
   inputBorderGray: "#D0D5DD",
   datesDisabled: "#9D9D9D",
