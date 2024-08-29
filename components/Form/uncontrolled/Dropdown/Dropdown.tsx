@@ -16,7 +16,7 @@ import type { WithSx } from "@/types";
 
 interface DropdownProps extends WithSx {
   name: string;
-  label: string;
+  label?: string;
   error?: string;
   onChange: (event: SelectChangeEvent<string>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
@@ -59,19 +59,21 @@ export const Dropdown: React.FC<DropdownProps> = ({
 
   return (
     <Box>
-      <Box sx={{ display: "flex", mb: 0.5 }}>
-        <Typography variant="subtitle2">{label}</Typography>
-        {required && (
-          <Typography
-            variant="subtitle2"
-            sx={{
-              color: theme.palette.error.main,
-            }}
-          >
-            *{" "}
-          </Typography>
-        )}
-      </Box>
+      {label && (
+        <Box sx={{ display: "flex", mb: 0.5 }}>
+          <Typography variant="subtitle2">{label}</Typography>
+          {required && (
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: theme.palette.error.main,
+              }}
+            >
+              *{" "}
+            </Typography>
+          )}
+        </Box>
+      )}
       <Select
         name={name}
         value={value}
