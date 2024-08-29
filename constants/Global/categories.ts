@@ -1,10 +1,12 @@
+import { Category } from "@/enums";
+
 export const categories = [
-  "Meetings",
-  "Weddings",
-  "Birthdays",
-  "Travels",
-  "Interviews",
-  "Appointments",
-  "Sport",
-  "Other",
+  Category.Meetings,
+  Category.Weddings,
+  Category.Birthdays,
+  Category.Travels,
+  Category.Interviews,
+  Category.Appointments,
+  Category.Sport,
+  Category.Other,
 ];

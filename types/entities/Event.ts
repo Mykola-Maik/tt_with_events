@@ -1,3 +1,5 @@
+import { Category } from "@/enums";
+
 export interface AddEvent {
   title: string;
   category: string;
@@ -8,4 +10,8 @@ export interface AddEvent {
 
 export interface Event extends AddEvent {
   id: number;
+}
+
+export interface CategoryType {
+  category: Category;
 }
