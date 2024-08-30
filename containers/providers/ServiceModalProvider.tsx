@@ -7,6 +7,14 @@ const AddEventModal = React.lazy(
   () => import("@/components/Modals/AddEventModal/AddEventModal")
 );
 
+const AddEventLeaveModal = React.lazy(
+  () => import("@/components/Modals/AddEventLeaveModal/AddEventLeaveModal")
+);
+
+const EditEventModal = React.lazy(
+  () => import("@/components/Modals/AddEventModal/AddEventModal")
+);
+
 const ServiceModalProvider = ({ children }: { children?: React.ReactNode }) => {
   const modalKeys = Object.keys(selectServiceModals());
 
@@ -26,6 +34,20 @@ const ServiceModalProvider = ({ children }: { children?: React.ReactNode }) => {
         return (
           <Suspense fallback={<GlobalLoader isOpen={true} />}>
             <AddEventModal index={index} />
+          </Suspense>
+        );
+
+      case ServiceModalName.AddEventLeave:
+        return (
+          <Suspense fallback={<GlobalLoader isOpen={true} />}>
+            <AddEventLeaveModal index={index} />
+          </Suspense>
+        );
+
+      case ServiceModalName.EditEvent:
+        return (
+          <Suspense fallback={<GlobalLoader isOpen={true} />}>
+            <EditEventModal index={index} />
           </Suspense>
         );
 

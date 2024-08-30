@@ -7,7 +7,7 @@ import {
 import axios, { type AxiosInstance } from "axios";
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: "http://localhost:7777/api",
 });
 
 export class HttpService implements HttpServiceInterface {

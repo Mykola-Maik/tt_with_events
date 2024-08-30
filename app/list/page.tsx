@@ -1,28 +1,25 @@
 "use client";
-import { EventFixture } from "@/tests/fixtures/Event";
-import {
-  Box,
-  Typography,
-  List as MuiList,
-  Button,
-  SelectChangeEvent,
-} from "@mui/material";
+import { Box, List as MuiList, Button, SelectChangeEvent } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { Event } from "@/types/entities/Event";
-import { Dropdown, EventListItem } from "@/components";
-import { useDispatch } from "react-redux";
+import { Dropdown, EventListItem, GlobalLoader } from "@/components";
+import { useDispatch, useSelector } from "react-redux";
 import { addServiceModal } from "@/redux/slices/serviceModalSlice/serviceModalSlice";
 import { ServiceModalName, SortBy } from "@/enums";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { categories, sortByList } from "@/constants";
-import { compareAsc } from "date-fns";
+import { parse } from "date-fns";
+import { EventState } from "@/types/redux/slices/eventSlice/eventTypes";
+import { fetchEvents } from "@/redux/slices/eventSlice";
+import { AppDispatch } from "@/redux/store";
 
 export default function List() {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [sortBy, setSortBy] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const { events, isLoading, error } = useSelector(
+    (state: { eventSlice: EventState }) => state.eventSlice
+  );
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -42,7 +39,10 @@ export default function List() {
           case SortBy.Name:
             return a.title.localeCompare(b.title);
           case SortBy.Date:
-            return compareAsc(a.dateOfEvent, b.dateOfEvent);
+            const dateA = parse(a.dateOfEvent, "dd/MM/yyyy", new Date());
+            const dateB = parse(b.dateOfEvent, "dd/MM/yyyy", new Date());
+
+            return dateA.getTime() - dateB.getTime();
           case SortBy.Place:
             return a.place.localeCompare(b.place);
           case SortBy.Category:
@@ -82,24 +82,7 @@ export default function List() {
   };
 
   useEffect(() => {
-    setEvents([
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-      EventFixture(),
-    ]);
-    setIsLoading(false);
+    dispatch(fetchEvents());
   }, []);
 
   const handleSort = (event: SelectChangeEvent<string>) => {
@@ -174,17 +157,17 @@ export default function List() {
             Clear
           </Button>
         </Box>
-        <Typography variant="h5" sx={{ width: "30%" }}>
-          List of your events!
-        </Typography>
         <Button
           variant="outlined"
           onClick={addEventHandler}
           sx={{ textTransform: "none", width: "10%" }}
         >
-          + Add an event
+          + Add
         </Button>
       </Box>
+
+      {isLoading && <GlobalLoader isOpen={isLoading} />}
+
       <MuiList
         sx={{
           overflow: "auto",

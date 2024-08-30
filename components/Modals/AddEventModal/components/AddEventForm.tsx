@@ -11,6 +11,15 @@ import { ServiceModalName } from "@/enums";
 import { useDispatch } from "react-redux";
 import { validationSchema } from "./validationScheme";
 import { AddEventFormView } from "./AddEventFormView";
+import {
+  createEvent,
+  fetchEventById,
+  updateEventById,
+} from "@/redux/slices/eventSlice";
+import { AppDispatch } from "@/redux/store";
+import { formatISO } from "date-fns";
+import { selectEventData, selectEventDataLoading } from "@/redux/selectors";
+import { useEffect, useRef } from "react";
 
 type FormData = yup.InferType<ReturnType<typeof validationSchema>>;
 
@@ -19,7 +28,9 @@ interface AddFormFormProps {
 }
 
 export const AddEventForm = ({ eventId }: AddFormFormProps) => {
-  const dispatch = useDispatch();
+  const eventData = selectEventData();
+  const isLoading = selectEventDataLoading();
+  const dispatch = useDispatch<AppDispatch>();
 
   const defaultValues: FormData = {
     title: "",
@@ -29,37 +40,87 @@ export const AddEventForm = ({ eventId }: AddFormFormProps) => {
     description: "",
   };
 
-  const { handleSubmit, control, watch, setError, clearErrors, resetField } =
-    useForm<FormData>({
-      defaultValues,
-      resolver: yupResolver(validationSchema()),
-      mode: "onChange",
-    });
+  const {
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    setError,
+    clearErrors,
+    resetField,
+    reset,
+  } = useForm<FormData>({
+    defaultValues,
+    resolver: yupResolver(validationSchema()),
+    mode: "onChange",
+  });
+
+  const initialValuesRef = useRef<FormData | null>(null);
+
+  useEffect(() => {
+    reset(defaultValues);
+    if (eventId) {
+      dispatch(fetchEventById(eventId));
+    }
+  }, [eventId, dispatch, reset]);
+
+  useEffect(() => {
+    if (eventId && eventData) {
+      (Object.keys(defaultValues) as Array<keyof FormData>).forEach((key) => {
+        const value = eventData[key as keyof typeof eventData];
+        if (key in eventData) {
+          setValue(
+            key,
+            typeof value === "number" ? String(value) : value ?? null
+          );
+        }
+      });
+    }
+
+    initialValuesRef.current = getValues();
+  }, [eventId, eventData, setValue, getValues]);
 
   const { isDirty, dirtyFields, isValid, errors } = useFormState({ control });
 
   const handleOnCancel = () => {
-    // if (isDirty) {
-    //   dispatch(
-    //     addServiceModal({
-    //       type: ServiceModalName.AddEvent,
-    //     })
-    //   );
-    // } else {
-    //   dispatch(removeServiceModal(ServiceModalName.AddEvent));
-    // }
-    dispatch(removeServiceModal(ServiceModalName.AddEvent));
+    const currentValues = getValues();
+
+    const hasChanges = Object.keys(currentValues).some((key) => {
+      return (
+        currentValues[key as keyof FormData] !==
+        initialValuesRef.current?.[key as keyof FormData]
+      );
+    });
+
+    if (hasChanges) {
+      dispatch(
+        addServiceModal({
+          type: ServiceModalName.AddEventLeave,
+        })
+      );
+    } else {
+      dispatch(
+        removeServiceModal(
+          eventId ? ServiceModalName.EditEvent : ServiceModalName.AddEvent
+        )
+      );
+    }
   };
 
   const handleFormSubmit: SubmitHandler<FormData> = (event) => {
-    console.log(event);
+    console.log(formatISO(event.dateOfEvent));
     dispatch(removeServiceModal(ServiceModalName.AddEvent));
+    const formatedEvent = {
+      ...event,
+      dateOfEvent: formatISO(event.dateOfEvent),
+    };
 
     if (eventId) {
-      // make patch request to update event by eventId
+      dispatch(updateEventById({ id: eventId, payload: formatedEvent }));
       dispatch(removeServiceModal(ServiceModalName.EditEvent));
     } else {
-      // make post request to create new event
+      dispatch(createEvent(formatedEvent));
       dispatch(removeServiceModal(ServiceModalName.AddEvent));
     }
   };
@@ -77,6 +138,7 @@ export const AddEventForm = ({ eventId }: AddFormFormProps) => {
             type="button"
             variant="outlined"
             color="primary"
+            disabled={isLoading}
             sx={{
               width: "50%",
               textTransform: "capitalize",
