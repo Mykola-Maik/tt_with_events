@@ -1,6 +1,6 @@
 import { Category } from "@/enums";
 
-export const getImageByCategory = (category: Category): string => {
+export const getImageByCategory = (category: string): string => {
   switch (category) {
     case Category.Meetings:
       return "meeting";

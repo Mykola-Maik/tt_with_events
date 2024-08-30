@@ -5,8 +5,35 @@ import Link from "next/link";
 import { ROUTES } from "@/enums/routes/Routes";
 import { truncateText } from "@/utils";
 import { EditIcon, TrashIcon } from "@/assets/icons";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { deleteEventById } from "@/redux/slices/eventSlice";
+import { addServiceModal } from "@/redux/slices/serviceModalSlice/serviceModalSlice";
+import { ServiceModalName } from "@/enums";
 
-export const EventListItem = ({ event }: { event: Event }) => {
+interface EventListItemProps {
+  event: Event;
+}
+
+export const EventListItem = React.memo(({ event }: EventListItemProps) => {
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleDelete = () => {
+    dispatch(deleteEventById(String(event.id)));
+  };
+
+  const handleUpdate = () => {
+    dispatch(
+      addServiceModal({
+        type: ServiceModalName.EditEvent,
+        payload: {
+          id: event.id,
+        },
+      })
+    );
+  };
+
   return (
     <Box>
       <Box
@@ -22,6 +49,7 @@ export const EventListItem = ({ event }: { event: Event }) => {
           border: "1px solid #D0D5DD",
           borderRadius: "8px",
           marginBottom: "12px",
+          overflow: "hidden",
           "&:hover": {
             borderColor: theme.palette.primary.main,
           },
@@ -53,10 +81,10 @@ export const EventListItem = ({ event }: { event: Event }) => {
         </Typography>
 
         <Box sx={{ display: "flex", gap: "12px" }}>
-          <EditIcon />
-          <TrashIcon />
+          <EditIcon onClick={handleUpdate} />
+          <TrashIcon onClick={handleDelete} />
         </Box>
       </Box>
     </Box>
   );
-};
+});

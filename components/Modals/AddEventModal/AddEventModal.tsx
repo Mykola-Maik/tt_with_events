@@ -5,20 +5,22 @@ import { removeServiceModal } from "@/redux/slices/serviceModalSlice/serviceModa
 import { AddEventForm } from "./components";
 import { selectServiceModalPayload } from "@/redux/selectors";
 import { useEffect } from "react";
+import { fetchEventById } from "@/redux/slices/eventSlice";
+import { AppDispatch } from "@/redux/store";
 
 interface AddEventModalProps {
   index: number;
 }
 
 const AddEventModal = ({ index }: AddEventModalProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const payload = selectServiceModalPayload(ServiceModalName.EditEvent);
   const { id } = payload || {};
 
   useEffect(() => {
     if (id) {
-      // make request to get event data by id
+      dispatch(fetchEventById(id));
     }
   }, [id, dispatch]);
 

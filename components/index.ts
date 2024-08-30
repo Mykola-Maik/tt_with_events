@@ -5,3 +5,4 @@ export * from "./Modals";
 export * from "./Providers";
 export * from "./Form";
 export * from "./EventListItem";
+export * from "./SubmitButtonModal";

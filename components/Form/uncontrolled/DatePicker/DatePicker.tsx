@@ -15,7 +15,7 @@ import { DatePicker as CustomDatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { useTheme } from "@mui/material/styles";
-import { format, isValid } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 
 interface DatePickerProps extends WithSx {
   name: string;
@@ -57,7 +57,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
     useEffect(() => {
       if (typeof value === "string") {
-        const date = new Date(value);
+        const date = parse(value, "dd/MM/yyyy", new Date());
         if (!isNaN(date.getTime())) {
           setSelectedDate(date);
         } else {
