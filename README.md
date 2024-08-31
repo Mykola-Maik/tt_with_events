@@ -1,5 +1,6 @@
 ## Deploy on Vercel
 
+But because the backend and db aren't deployed you can't make requests, so it works incorrectly yet
 https://tt-with-events-r5szfkaja-mikels-projects-0370de54.vercel.app
 
 # Technoligies and libs that were used
