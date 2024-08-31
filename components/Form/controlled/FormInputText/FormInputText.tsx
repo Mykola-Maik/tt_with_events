@@ -11,7 +11,7 @@ import type { SxProps } from "@mui/system";
 interface FormInputTextProps<TFieldValues extends FieldValues> {
   name: Path<TFieldValues>;
   control: Control<TFieldValues>;
-  rules?: RegisterOptions;
+  rules?: RegisterOptions<TFieldValues>;
   label: string;
   placeholder?: string;
   required?: boolean;
