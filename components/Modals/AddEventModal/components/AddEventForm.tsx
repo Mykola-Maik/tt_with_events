@@ -109,7 +109,6 @@ export const AddEventForm = ({ eventId }: AddFormFormProps) => {
   };
 
   const handleFormSubmit: SubmitHandler<FormData> = (event) => {
-    console.log(formatISO(event.dateOfEvent));
     dispatch(removeServiceModal(ServiceModalName.AddEvent));
     const formatedEvent = {
       ...event,
