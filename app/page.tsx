@@ -20,7 +20,7 @@ export default function Home() {
         variant="h1"
         sx={{ color: muiTheme.palette.primary.main, textAlign: "center" }}
       >
-        Hello, let's explore the application!
+        Hello, explore the application!
       </Typography>
       <Link href={ROUTES.LIST}>
         <Button variant="outlined" sx={{ textTransform: "none" }}>
