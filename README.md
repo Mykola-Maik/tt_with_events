@@ -13,3 +13,8 @@ https://tt-with-events-r5szfkaja-mikels-projects-0370de54.vercel.app
 * date-fns;
 * ts;
 
+# How to start
+
+- Clone git repository to your laptop;
+- npm i
+- npm run dev
